@@ -1,18 +1,9 @@
-import React, { useState } from "react";
-import { Box, Grid, IconButton, InputAdornment } from "@mui/material";
+import React from "react";
+import { Box, Grid } from "@mui/material";
 import { Typography } from "antd";
-import { useFormik } from "formik";
-import * as yup from "yup";
 import { Input } from "../ui/input";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Button } from "../ui/button";
-import {
-  addStudentSchema,
-  addTeacherSchema,
-  updateSchoolSchema,
-} from "@/lib/schemas";
 import { Label } from "../ui/label";
-import { MultiSelect } from "primereact/multiselect";
 import {
   Select,
   SelectContent,
@@ -22,23 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { generatePassword, generateSchoolId } from "@/lib/functions";
-import { useSelector } from "react-redux";
+import { generatePassword } from "@/lib/functions";
 
-const AddStudentForm = ({ formik, loading }) => {
-  const { isLoading } = useSelector((state) => state.student);
-
-  const handleImageChange = () => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        formik.setFieldValue("picture", e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
   return (
     <Box className="">
       <Box>
@@ -309,18 +286,8 @@ const AddStudentForm = ({ formik, loading }) => {
             </Grid>
 
             <Box className="flex space-x-2 mt-10">
-              {/* <Button
-                className="w-full "
-                type=""
-                onClick={() => setIFirstForm(false)}>
-                Next
-              </Button> */}
-
-              <Button
-                className=" "
-                type="submit"
-                disabled={loading || isLoading}>
-                {loading || isLoading ? "Please wait..." : "Add Student"}
+              <Button className=" " type="submit" disabled={isLoading}>
+                {isLoading ? "Please wait..." : "Add Student"}
               </Button>
             </Box>
           </Box>

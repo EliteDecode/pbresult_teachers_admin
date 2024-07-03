@@ -10,8 +10,8 @@ const singleStudentResult = JSON.parse(
 );
 
 const initialState = {
-  singleTermGradings: singleTermGradings ? singleTermGradings : null,
-  singleStudentResult: singleStudentResult ? singleStudentResult : null,
+  singleTermGradings: null,
+  singleStudentResult: null,
   resultsPerTermSubjectClass: null,
   resultsPerTermClass: null,
   isError: false,

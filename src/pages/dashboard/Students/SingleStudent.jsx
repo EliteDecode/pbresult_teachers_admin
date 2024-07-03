@@ -19,8 +19,6 @@ const SingleStudent = () => {
   const { terms } = useSelector((state) => state.calender);
   useEffect(() => {
     dispatch(getSingleStudent(studentId));
-    dispatch(getTerms());
-    dispatch(getStudents());
   }, []);
 
   return (

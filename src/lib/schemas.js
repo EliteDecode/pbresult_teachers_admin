@@ -172,11 +172,8 @@ export const addparentSchema = yup.object({
 export const addStudentSchema = yup.object().shape({
   firstname: yup.string().required("First name is required"),
   lastname: yup.string().required("Last name is required"),
-  email: yup
-    .string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  nin: yup.string().required("NIN is required"),
+  email: yup.string(),
+  nin: yup.string(),
   gender: yup.string().required("Gender is required"),
   password: yup.string().min(8, "Password must be at least 8 characters long"),
   picture: yup.mixed().required("Picture is required"),

@@ -11,6 +11,7 @@ import AddStudentResultsForm from "@/components/Forms/AddStudentResultsForm";
 const AddStudentResult = () => {
   const dispatch = useDispatch();
   const { isLoading, singleTermGradings } = useSelector((state) => state.grade);
+  const { singleTerm } = useSelector((state) => state.calender);
   const { studentsPerCourse, isLoading: loading } = useSelector(
     (state) => state.student
   );
@@ -18,7 +19,7 @@ const AddStudentResult = () => {
   const { termId, subjectId, classId } = useParams();
 
   useEffect(() => {
-    dispatch(getTermGradingById(termId));
+    dispatch(getTermGradingById(singleTerm?.data?.term_grading?.id));
     dispatch(
       getStudentsOfOfferedCourse({
         classroom_id: classId,

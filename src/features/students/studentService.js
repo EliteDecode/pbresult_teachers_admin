@@ -38,12 +38,6 @@ const getStudents = async (token) => {
     config
   );
 
-  if (response.data) {
-    localStorage.setItem(
-      "pbSchoolTeachersStudents",
-      JSON.stringify(response.data)
-    );
-  }
   return response.data;
 };
 const getStudentsOfOfferedCourse = async (token, data) => {

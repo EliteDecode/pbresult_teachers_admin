@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import studentservice from "./studentService";
 import { createAsyncThunkWithHandler } from "../api";
 
-const students = JSON.parse(localStorage.getItem("pbSchoolTeachersStudents"));
-
 const initialState = {
   students: null,
   studentsPerCourse: null,
@@ -83,6 +81,7 @@ const studentSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.message = "student added successfully";
+        state.singleStudent = action.payload;
       })
       .addCase(addStudent.rejected, (state, action) => {
         state.isLoading = false;

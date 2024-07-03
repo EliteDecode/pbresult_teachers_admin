@@ -11,20 +11,25 @@ import {
 import { Typography } from "antd";
 import SingleStudentResultDetails from "@/components/dashboard/SingleStudentResultDetails";
 import EditStudentResultForm from "@/components/Forms/EditStudentResultsForm";
+import Error from "@/lib/Error";
 const SingleStudentResult = () => {
   const dispatch = useDispatch();
   const { isLoading, singleStudentResult } = useSelector(
     (state) => state.grade
   );
+  const { singleTerm } = useSelector((state) => state.calender);
   const { termId, studentId, subjectId } = useParams();
   useEffect(() => {
-    dispatch(getStudentResult({ termId, studentId, subjectId }));
-    dispatch(getTermGradingById(termId));
+    if (singleTerm) {
+      dispatch(getStudentResult({ termId, studentId, subjectId }));
+      dispatch(getTermGradingById(singleTerm?.data?.term_grading?.id));
+    }
   }, []);
 
   return (
     <Box>
       <Box className="bg-white flex justify-between my-3 rounded-md p-1.5  w-full py-5">
+        {}
         <Box className="flex items-center space-x-2">
           <img src={teachersImg} alt="dashboard icon" className="w-[32px]" />
           <Box>
@@ -40,7 +45,7 @@ const SingleStudentResult = () => {
         </Box>
       </Box>
 
-      {isLoading && !singleStudentResult ? (
+      {isLoading && !singleStudentResult?.data ? (
         <Loader />
       ) : (
         <>

@@ -38,7 +38,7 @@ const DashboardHomePage = () => {
   const HomeCardContents = [
     {
       title: "Total Student",
-      description: students?.data?.length,
+      description: students?.data?.length || "0",
       image: studentsImg,
       buttonText: "View Students",
       link: "/dashboard/students",

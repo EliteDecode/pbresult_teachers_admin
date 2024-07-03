@@ -10,7 +10,6 @@ import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
 const StudentResult = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.grade);
-  const { isLoading: loading } = useSelector((state) => state.student);
   const { user } = useSelector((state) => state.pbTeachersAuth);
   const { terms } = useSelector((state) => state.calender);
 
@@ -19,7 +18,6 @@ const StudentResult = () => {
   )?.id;
 
   useEffect(() => {
-    dispatch(getTerms());
     dispatch(
       getAllStudentResultPerClass({ classId: user?.classroom?.id, termId })
     );
@@ -29,7 +27,7 @@ const StudentResult = () => {
     <Box>
       <ResultHeader />
       <Box className="mt-5">
-        {isLoading || loading ? (
+        {isLoading ? (
           <Loader />
         ) : (
           <Box className="overflow-x-scroll  bg-white">

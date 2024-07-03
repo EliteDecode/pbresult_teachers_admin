@@ -18,6 +18,10 @@ const SingleStudentDetails = ({ singleStudent }) => {
       value: singleStudent?.data?.student_school_id,
     },
     {
+      title: "Student Pin",
+      value: singleStudent?.data?.student_pin,
+    },
+    {
       title: "Address",
       value: singleStudent?.data?.address,
     },

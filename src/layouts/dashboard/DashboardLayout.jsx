@@ -2,6 +2,8 @@ import AlertPasswordChange from "@/components/Modals/AlertPasswordChange";
 import Header from "@/components/dashboard/Header";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { getUserDetails, reset } from "@/features/auth/authSlice";
+import { getTermById, getTerms } from "@/features/calender/calenderSlice";
+import Loader from "@/lib/Loader";
 import { Box } from "@mui/material";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -10,9 +12,14 @@ import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
   const [isSidebar, setIsSidebar] = useState(false);
-  const { user, isSuccess, isError, message } = useSelector(
-    (state) => state.pbTeachersAuth
-  );
+  const {
+    user,
+    isSuccess,
+    isError,
+    message,
+    isLoading: loading,
+  } = useSelector((state) => state.pbTeachersAuth);
+  const { terms, isLoading } = useSelector((state) => state.calender);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,8 +44,16 @@ const DashboardLayout = () => {
     }
   }, []);
 
+  const termId = terms?.data?.find(
+    (term) => term?.active == "1" && term?.current == "1"
+  )?.id;
+
   useEffect(() => {
     dispatch(getUserDetails());
+    if (terms) {
+      dispatch(getTermById(termId));
+    }
+    dispatch(getTerms());
   }, []);
 
   useEffect(() => {
@@ -83,7 +98,7 @@ const DashboardLayout = () => {
           } header transit  bg-[#919EAB29] w-[100%]`}>
           <Header setIsSidebar={setIsSidebar} isSidebar={isSidebar} />
           <Box className=" sm:p-5 p-2 ">
-            <Outlet />
+            {isLoading || loading ? <Loader /> : <Outlet />}
           </Box>
         </Box>
       </Box>
