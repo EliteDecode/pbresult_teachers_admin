@@ -81,9 +81,26 @@ const getAllStudentResultPerClass = async (token, data) => {
     },
   };
   const response = await axios.get(
-    `${API_URL}/result/classroom/${data.classId}/term/${data.termId}`,
+    `${API_URL}/result/classroom/${data.classId}`,
     config
   );
+
+  return response.data;
+};
+
+const getSingleStudentResultSheet = async (token, data) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(
+    `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`,
+    config
+  );
+
+  console.log(response.data);
 
   return response.data;
 };
@@ -95,6 +112,7 @@ const grade = {
   editStudentResult,
   getAllStudentResultPerClassPerSubject,
   getAllStudentResultPerClass,
+  getSingleStudentResultSheet,
 };
 
 export default grade;

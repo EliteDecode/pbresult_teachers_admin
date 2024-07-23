@@ -83,10 +83,6 @@ const getTerms = async (token) => {
 
   const response = await axios.get(`${API_URL}/term`, config);
 
-  if (response.data) {
-    localStorage.setItem("pbSchoolAdminTerm", JSON.stringify(response.data));
-  }
-
   return response.data;
 };
 

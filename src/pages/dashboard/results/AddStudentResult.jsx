@@ -8,18 +8,14 @@ import SingleStudentResultHeader from "@/components/dashboard/ResultHeader";
 import { getTermGradingById } from "@/features/grade/gradeSlice";
 import { getStudentsOfOfferedCourse } from "@/features/students/studentSlice";
 import AddStudentResultsForm from "@/components/Forms/AddStudentResultsForm";
+import { getTermById } from "@/features/calender/calenderSlice";
 const AddStudentResult = () => {
   const dispatch = useDispatch();
   const { isLoading, singleTermGradings } = useSelector((state) => state.grade);
   const { singleTerm } = useSelector((state) => state.calender);
-  const { studentsPerCourse, isLoading: loading } = useSelector(
-    (state) => state.student
-  );
-
+  const { isLoading: loading } = useSelector((state) => state.student);
   const { termId, subjectId, classId } = useParams();
-
   useEffect(() => {
-    dispatch(getTermGradingById(singleTerm?.data?.term_grading?.id));
     dispatch(
       getStudentsOfOfferedCourse({
         classroom_id: classId,
@@ -27,6 +23,10 @@ const AddStudentResult = () => {
         subject_id: subjectId,
       })
     );
+
+    if (singleTerm) {
+      dispatch(getTermGradingById(singleTerm?.data?.term_grading?.id));
+    }
   }, []);
 
   return (

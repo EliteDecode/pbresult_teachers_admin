@@ -23,6 +23,7 @@ import AddStudentResult from "./pages/dashboard/results/AddStudentResult";
 import SingleStudentResult from "./pages/dashboard/results/SingleStudentResult";
 import ViewStudentPerSubjectResult from "./pages/dashboard/results/ViewStudentPerSubjectResult";
 import ResultBroadsheet from "./pages/dashboard/results/ResultBroadsheet";
+import SingleStudentResultBroadsheet from "./pages/dashboard/results/SingleStudentResultBroadsheet";
 
 // routes
 
@@ -100,6 +101,15 @@ export default function App() {
           path: "/dashboard/result/broadsheet",
           element: !token ? <Navigate to="/login" /> : <ResultBroadsheet />,
         },
+        {
+          path: "/dashboard/students/result/:studentId/:sessionId",
+          element: !token ? (
+            <Navigate to="/login" />
+          ) : (
+            <SingleStudentResultBroadsheet />
+          ),
+        },
+
         {
           path: "/login",
           element: <Login />,

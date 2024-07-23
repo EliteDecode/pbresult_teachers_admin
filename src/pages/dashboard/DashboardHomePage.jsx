@@ -2,14 +2,13 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Box, Grid } from "@mui/material";
-import dashboadImg from "../../assets/icons/dashboard.png";
+import dashboardImg from "../../assets/icons/dashboard.png";
 import { Typography } from "antd";
 import HeaderTitle from "@/components/dashboard/HeaderTitle";
 
@@ -24,15 +23,36 @@ import calenderImg from "../../assets/icons/calendar.png";
 import resultImg from "../../assets/icons/results.png";
 import { Link } from "react-router-dom";
 import Loader from "@/lib/Loader";
+import {
+  getSessions,
+  getTermById,
+  getTerms,
+} from "@/features/calender/calenderSlice";
+import { getUserDetails } from "@/features/auth/authSlice";
 
 const DashboardHomePage = () => {
   const [date, setDate] = React.useState(new Date());
   const dispatch = useDispatch();
   const { students } = useSelector((state) => state.student);
   const { isLoading } = useSelector((state) => state.pbTeachersAuth);
+  const { terms, isLoading: loading } = useSelector((state) => state.calender);
 
   useEffect(() => {
     dispatch(getStudents());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getTerms());
+    if (terms) {
+      const termId = terms?.data?.find(
+        (term) => term?.active === "1" && term?.current === "1"
+      )?.id;
+
+      if (termId) {
+        dispatch(getTermById(termId));
+      }
+    }
+    dispatch(getUserDetails());
   }, []);
 
   const HomeCardContents = [
@@ -43,35 +63,37 @@ const DashboardHomePage = () => {
       buttonText: "View Students",
       link: "/dashboard/students",
     },
-
     {
-      title: "Calender",
+      title: "Calendar",
       description: "",
       image: calenderImg,
-      buttonText: "View Calender",
+      buttonText: "View Calendar",
+      link: "/dashboard/calendar",
     },
     {
       title: "Results",
       description: "0",
       image: resultImg,
       buttonText: "View Results",
+      link: "/dashboard/results",
     },
   ];
+
   return (
     <Box>
-      {isLoading ? (
+      {isLoading || loading ? (
         <Loader />
       ) : (
         <Grid container spacing={1}>
-          <Grid item sm={12} md={9} className="">
+          <Grid item sm={12} md={9}>
             <HeaderTitle
-              img={dashboadImg}
+              img={dashboardImg}
               title="Overview"
               subtitle="Showing all data in the system"
             />
             <Grid container spacing={2}>
               {HomeCardContents.map((item, index) => (
-                <Grid item xs={12} sm={12} md={4} key={index} className="">
+                <Grid item xs={12} sm={12} md={4} key={index}>
                   <Card className="border-none">
                     <Box className="flex justify-between items-center">
                       <CardHeader>
@@ -85,12 +107,11 @@ const DashboardHomePage = () => {
                       <Box className="p-6">
                         <img
                           src={item.image}
-                          alt=" image"
+                          alt={`${item.title} image`}
                           className="w-[32px]"
                         />
                       </Box>
                     </Box>
-
                     <CardFooter>
                       <Link to={item.link}>
                         <Button size="sm" variant="secondary">
@@ -102,9 +123,8 @@ const DashboardHomePage = () => {
                 </Grid>
               ))}
             </Grid>
-
             <Grid container className="mt-5">
-              <Grid item xs={12} sm={12} md={12}>
+              <Grid item xs={12}>
                 <Box className="sm:h-[55vh] h-[45vh] py-5 bg-white rounded-md">
                   <Typography className="text-[14px] p-5 mb-5 font-semibold uppercase text-primary">
                     Overview of Users
@@ -150,9 +170,8 @@ const DashboardHomePage = () => {
                         </Typography>
                       </Box>
                     </Box>
-
                     <Box className="flex items-center justify-end">
-                      <Typography className="text-[8px] ">
+                      <Typography className="text-[8px]">
                         {item.timeline}
                       </Typography>
                     </Box>

@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+
+import { Typography } from "antd";
+import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from "react-router-dom";
+import teachersImg from "../../assets/icons/teachers-day.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,19 +24,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Typography } from "antd";
-import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
-import teachersImg from "../../assets/icons/teachers-day.png";
 import { Box } from "@mui/material";
-import { Label } from "../ui/label";
-const SingleStudentHeader = ({ studentId, terms }) => {
-  const [term, setTerm] = useState();
-  const navigate = useNavigate();
+import { useSelector } from "react-redux";
 
-  const handleSelectTerm = () => {
-    navigate(`/dashboard/results/${term}`);
-  };
+const SingleStudentHeader = ({ studentId, terms }) => {
+  const [session, setSession] = useState();
+  const navigate = useNavigate();
+  const { sessions } = useSelector((state) => state.calender);
+
+  // const handleSelectTerm = () => {
+  //   navigate(`/dashboard/students/result/${studentId}/${session}`);
+  // };
   return (
     <div>
       {" "}
@@ -50,10 +53,50 @@ const SingleStudentHeader = ({ studentId, terms }) => {
               </Typography>
             </Box>
           </Box>
-          <Box className="space-x-2 flex items-center">
-            <Link to={`/dashboard/students/edit-student/${studentId}`}>
-              <Button variant="secondary">Edit Student Details</Button>
-            </Link>
+          <Box className="flex items-center space-x-2">
+            <Box className="space-x-2 flex items-center">
+              <Link to={`/dashboard/students/edit-student/${studentId}`}>
+                <Button variant="secondary">Edit Student Details</Button>
+              </Link>
+            </Box>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button>View Student Result</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader className="text-center">
+                  <AlertDialogTitle>Select Session</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    <Select
+                      name="gender"
+                      onValueChange={(value) => setSession(value)}
+                      className="text-[12px]">
+                      <SelectTrigger className="w-[100%] text-xs">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sessions</SelectLabel>
+                          {sessions?.data?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  {session && (
+                    <AlertDialogAction onClick={handleSelectTerm}>
+                      Continue
+                    </AlertDialogAction>
+                  )}
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </Box>
         </Box>
       </Box>

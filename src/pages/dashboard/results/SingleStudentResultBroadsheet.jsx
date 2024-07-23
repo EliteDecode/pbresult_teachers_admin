@@ -1,37 +1,42 @@
 import BroadsheetTable from "@/components/Tables/BroadsheetTable.jsx";
 import { Button } from "@/components/ui/button";
-import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
+import {
+  getAllStudentResultPerClass,
+  getSingleStudentResultSheet,
+} from "@/features/grade/gradeSlice";
 import { getStudents } from "@/features/students/studentSlice";
-import Error from "@/lib/Error";
 import Loader from "@/lib/Loader";
 import { Box } from "@mui/material";
 import { Typography } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 
-const ResultBroadsheet = () => {
-  const { resultsPerTermClass } = useSelector((state) => state.grade);
-  const { students, isLoading } = useSelector((state) => state.student);
+const SingleStudentResultBroadsheet = () => {
+  const { resultsPerTermClass, isLoading } = useSelector(
+    (state) => state.grade
+  );
+  const { students } = useSelector((state) => state.student);
   const { user } = useSelector((state) => state.pbTeachersAuth);
   const { terms } = useSelector((state) => state.calender);
+
+  const { studentId, sessionId } = useParams();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getStudents());
-    dispatch(getAllStudentResultPerClass({ classId: user?.classroom?.id }));
+    dispatch(getSingleStudentResultSheet({ studentId, sessionId }));
   }, []);
 
   return (
     <Box className="#fafafa">
       {isLoading ? (
         <Loader />
-      ) : !isLoading && !resultsPerTermClass ? (
-        <Error />
       ) : (
         <>
-          <Box className="w-[90%] m-auto relative my-5">
+          {/* <Box className="w-[90%] m-auto relative my-5">
             <Box className="absolute top-0 left-0">
               <img
                 src={user?.school?.picture}
@@ -68,11 +73,11 @@ const ResultBroadsheet = () => {
             <Box className="overflow-x-scroll bg-white">
               <BroadsheetTable classroom={user?.classroom?.name} />
             </Box>
-          </Box>
+          </Box> */}
         </>
       )}
     </Box>
   );
 };
 
-export default ResultBroadsheet;
+export default SingleStudentResultBroadsheet;

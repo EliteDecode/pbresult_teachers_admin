@@ -12,6 +12,7 @@ const singleStudentResult = JSON.parse(
 const initialState = {
   singleTermGradings: null,
   singleStudentResult: null,
+  singleStudentResultSheet: null,
   resultsPerTermSubjectClass: null,
   resultsPerTermClass: null,
   isError: false,
@@ -71,6 +72,14 @@ export const getStudentResult = createAsyncThunkWithHandler(
   }
 );
 
+export const getSingleStudentResultSheet = createAsyncThunkWithHandler(
+  "grade/getSingleStudentResultSheet",
+  async (data, thunkAPI) => {
+    const token = thunkAPI.getState().pbTeachersAuth.token;
+    return await gradeService.getSingleStudentResultSheet(token, data);
+  }
+);
+
 const gradeSlice = createSlice({
   name: "grade",
   initialState,
@@ -99,6 +108,22 @@ const gradeSlice = createSlice({
         state.message = action.payload;
         state.isSuccess = false;
       })
+      .addCase(getSingleStudentResultSheet.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleStudentResultSheet.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.singleStudentResultSheet = action.payload;
+      })
+      .addCase(getSingleStudentResultSheet.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.isSuccess = false;
+      })
+
       .addCase(getStudentResult.pending, (state) => {
         state.isLoading = true;
       })

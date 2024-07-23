@@ -10,7 +10,7 @@ import {
 } from "@/features/students/studentSlice";
 import Loader from "@/lib/Loader";
 import SingleStudentDetails from "@/components/dashboard/SingleStudentDetails";
-import { getTerms } from "@/features/calender/calenderSlice";
+import { getSessions, getTerms } from "@/features/calender/calenderSlice";
 import SingleStudentHeader from "@/components/dashboard/SingleStudentHeader";
 const SingleStudent = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const SingleStudent = () => {
   const { terms } = useSelector((state) => state.calender);
   useEffect(() => {
     dispatch(getSingleStudent(studentId));
+    dispatch(getSessions());
   }, []);
 
   return (

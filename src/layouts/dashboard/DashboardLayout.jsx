@@ -19,7 +19,6 @@ const DashboardLayout = () => {
     message,
     isLoading: loading,
   } = useSelector((state) => state.pbTeachersAuth);
-  const { terms, isLoading } = useSelector((state) => state.calender);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,18 +41,6 @@ const DashboardLayout = () => {
     if (window.innerWidth > 767) {
       setIsSidebar(true);
     }
-  }, []);
-
-  const termId = terms?.data?.find(
-    (term) => term?.active == "1" && term?.current == "1"
-  )?.id;
-
-  useEffect(() => {
-    dispatch(getUserDetails());
-    if (terms) {
-      dispatch(getTermById(termId));
-    }
-    dispatch(getTerms());
   }, []);
 
   useEffect(() => {
@@ -98,7 +85,7 @@ const DashboardLayout = () => {
           } header transit  bg-[#919EAB29] w-[100%]`}>
           <Header setIsSidebar={setIsSidebar} isSidebar={isSidebar} />
           <Box className=" sm:p-5 p-2 ">
-            {isLoading || loading ? <Loader /> : <Outlet />}
+            <Outlet />
           </Box>
         </Box>
       </Box>
