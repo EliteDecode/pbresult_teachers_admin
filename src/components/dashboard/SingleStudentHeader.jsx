@@ -32,14 +32,14 @@ const SingleStudentHeader = ({ studentId, terms }) => {
   const navigate = useNavigate();
   const { sessions } = useSelector((state) => state.calender);
 
-  // const handleSelectTerm = () => {
-  //   navigate(`/dashboard/students/result/${studentId}/${session}`);
-  // };
+  const handleSelectTerm = () => {
+    navigate(`/dashboard/students/result/${studentId}/${session}`);
+  };
   return (
     <div>
       {" "}
       <Box className="flex space-x-2 sm:justify-end justify-center items-center ">
-        <Box className="bg-white flex justify-between my-3 rounded-md px-4  w-full py-5">
+        <Box className="bg-white flex flex-wrap sm:space-y-0 space-y-4 justify-between my-3 rounded-md px-4  w-full py-5">
           <Box className="flex items-center space-x-2">
             <img src={teachersImg} alt="dashboard icon" className="w-[32px]" />
             <Box>

@@ -95,6 +95,10 @@ const getSingleStudentResultSheet = async (token, data) => {
     },
   };
 
+  console.log(
+    `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`
+  );
+
   const response = await axios.get(
     `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`,
     config
