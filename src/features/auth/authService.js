@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../api";
 
-const logout = async () => {
+export const logout = async () => {
   localStorage.removeItem("pbSchoolTeacherUser");
   localStorage.removeItem("pbSchoolTeacherUserToken");
 };

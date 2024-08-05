@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { logout } from "./auth/authService";
 // export const API_URL = "https://pbresult.purplebeetech.com/api";
 export const API_URL = "https://api.pbresultvault.com/api";
 
@@ -22,6 +23,9 @@ export const createAsyncThunkWithHandler = (name, thunkFunction) =>
       }
       return result;
     } catch (error) {
+      if (error?.response?.status === 401) {
+        logout();
+      }
       return handleAsyncError(error, thunkAPI);
     }
   });

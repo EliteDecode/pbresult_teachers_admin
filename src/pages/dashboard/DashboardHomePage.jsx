@@ -39,22 +39,18 @@ const DashboardHomePage = () => {
 
   useEffect(() => {
     dispatch(getStudents());
+    dispatch(getTerms());
+    dispatch(getUserDetails());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getTerms());
     if (terms) {
-      const termId = terms?.data?.find(
-        (term) => term?.active === "1" && term?.current === "1"
-      )?.id;
-
+      const termId = terms?.data?.find((term) => term?.current === 1)?.id;
       if (termId) {
         dispatch(getTermById(termId));
       }
     }
-    dispatch(getUserDetails());
-  }, []);
-
+  }, [terms, dispatch]);
   const HomeCardContents = [
     {
       title: "Total Student",
