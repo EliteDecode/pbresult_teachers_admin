@@ -18,51 +18,54 @@ const BroadsheetTable = ({ classroom }) => {
 
   const baseColumns = [
     {
-      title: " Name",
+      title: "Name",
       dataIndex: "student_name",
       key: "student_name",
     },
   ];
-
-  const dynamicColumns = subjects?.map((subject) => {
-    const subColumns = [
-      ...assessments[subject]?.map((assessment) => ({
+  const dynamicColumns = subjects.map((subject) => {
+    const termColumns = Object.keys(assessments[subject]).map((term) => {
+      const subColumns = assessments[subject][term].map((assessment) => ({
         title: assessment,
-        dataIndex: `${subject}_${assessment}`,
-        key: `${subject}_${assessment}`,
-      })),
-      {
-        title: "Total",
-        dataIndex: `${subject}_cumulative_score`,
-        key: `${subject}_cumulative_score`,
-      },
-      {
-        title: "Grade",
-        dataIndex: `${subject}_grade`,
-        key: `${subject}_grade`,
-      },
-    ];
-
+        dataIndex: `${subject}_${term}_${assessment}`,
+        key: `${subject}_${term}_${assessment}`,
+      }));
+      subColumns.push(
+        {
+          title: "Total",
+          dataIndex: `${subject}_${term}_cumulative_score`,
+          key: `${subject}_${term}_cumulative_score`,
+        },
+        {
+          title: "Grade",
+          dataIndex: `${subject}_${term}_grade`,
+          key: `${subject}_${term}_grade`,
+        }
+      );
+      return {
+        title: term,
+        children: subColumns,
+      };
+    });
     return {
       title: subject,
-      children: subColumns,
+      children: termColumns,
     };
   });
 
   const columns = [...baseColumns, ...dynamicColumns];
-
-  const csvData = result.map((row) => {
-    const csvRow = { "Student Name": row?.student_name };
-    subjects.forEach((subject) => {
-      assessments[subject]?.forEach((assessment) => {
-        csvRow[`${subject} ${assessment}`] = row[`${subject}_${assessment}`];
-      });
-      csvRow[`${subject} Cumulative Score`] =
-        row[`${subject}_cumulative_score`];
-      csvRow[`${subject} Grade`] = row[`${subject}_grade`];
-    });
-    return csvRow;
-  });
+  // const csvData = result.map((row) => {
+  //   const csvRow = { "Student Name": row?.student_name };
+  //   subjects.forEach((subject) => {
+  //     assessments[subject]?.forEach((assessment) => {
+  //       csvRow[`${subject} ${assessment}`] = row[`${subject}_${assessment}`];
+  //     });
+  //     csvRow[`${subject} Cumulative Score`] =
+  //       row[`${subject}_cumulative_score`];
+  //     csvRow[`${subject} Grade`] = row[`${subject}_grade`];
+  //   });
+  //   return csvRow;
+  // });
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -95,13 +98,13 @@ const BroadsheetTable = ({ classroom }) => {
   return (
     <>
       <div className="mb-4 space-x-2">
-        <CSVLink
+        {/* <CSVLink
           data={csvData}
           filename={`${classroom}-results.csv`}
           className="btn btn-primary"
           target="_blank">
           <Button size="sm">Export to CSV</Button>
-        </CSVLink>
+        </CSVLink> */}
         <Button variant="secondary" size="sm" onClick={() => navigate(-1)}>
           Return
         </Button>

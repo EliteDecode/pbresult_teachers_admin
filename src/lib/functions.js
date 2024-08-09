@@ -31,28 +31,40 @@ export const transformData = (data) => {
   const subjects = new Set();
   const assessments = {};
 
-  data?.forEach((student) => {
-    student?.subjects?.forEach((subject) => {
-      subjects?.add(subject?.subject_name);
-      subject?.continuous_assessment?.forEach((assessment) => {
-        if (!assessments[subject?.subject_name]) {
-          assessments[subject?.subject_name] = [];
+  data.forEach((student) => {
+    student.subjects.forEach((subject) => {
+      subjects.add(subject.name);
+      subject.results.forEach((result) => {
+        if (!assessments[subject.name]) {
+          assessments[subject.name] = {};
         }
-        if (!assessments[subject?.subject_name]?.includes(assessment[1])) {
-          assessments[subject?.subject_name]?.push(assessment[1]);
+        if (!assessments[subject.name][result.term]) {
+          assessments[subject.name][result.term] = [];
         }
+        result.continuous_assessment?.forEach((assessment) => {
+          if (!assessments[subject.name][result.term].includes(assessment[1])) {
+            assessments[subject.name][result.term].push(assessment[1]);
+          }
+        });
       });
     });
   });
 
-  const result = data?.map((student) => {
-    const studentData = { student_name: student?.student_name };
-    student?.subjects?.forEach((subject) => {
-      const subjectKey = subject.subject_name;
-      studentData[`${subjectKey}_cumulative_score`] = subject?.cumulative_score;
-      studentData[`${subjectKey}_grade`] = subject?.grade;
-      subject?.continuous_assessment?.forEach((assessment) => {
-        studentData[`${subjectKey}_${assessment[1]}`] = assessment[2] ?? "N/A";
+  const result = data.map((student) => {
+    const studentData = {
+      student_name: student.student_name,
+      key: student.student_id,
+    };
+    student.subjects.forEach((subject) => {
+      const subjectKey = subject.name;
+      subject.results.forEach((result) => {
+        result.continuous_assessment?.forEach((assessment) => {
+          studentData[`${subjectKey}_${result.term}_${assessment[1]}`] =
+            assessment[2] ?? "N/A";
+        });
+        studentData[`${subjectKey}_${result.term}_cumulative_score`] =
+          result.cumulative_score;
+        studentData[`${subjectKey}_${result.term}_grade`] = result.grade;
       });
     });
     return studentData;
@@ -60,7 +72,6 @@ export const transformData = (data) => {
 
   return { result, subjects: Array.from(subjects), assessments };
 };
-
 //For singleStudent Result Broadsheet
 
 export const generateColumns = (data) => {
@@ -74,7 +85,7 @@ export const generateColumns = (data) => {
 
   let testColumns = new Set();
 
-  data?.subjects?.forEach((subject) => {
+  data?.forEach((subject) => {
     subject?.results?.forEach((term) => {
       term?.continuous_assessment?.forEach((assessment) => {
         testColumns?.add(assessment[1]);
@@ -107,9 +118,14 @@ export const generateColumns = (data) => {
       key: "third_term",
     },
     {
-      title: "Total Cumulative",
+      title: "Cumulative",
       dataIndex: "total_cumulative_score",
       key: "total_cumulative_score",
+    },
+    {
+      title: "Grade",
+      dataIndex: "cumulative_grade",
+      key: "cumulative_grade",
     },
   ]);
 
@@ -117,23 +133,23 @@ export const generateColumns = (data) => {
 };
 
 export const generateDataSource = (data) => {
-  console.log(data);
-  return data?.subjects?.map((subject) => {
+  return data?.map((subject) => {
     let dataSourceItem = {
       key: subject?.subject_id,
       subject_name: subject?.subject_name,
       total_cumulative_score: subject?.total_cumulative_score,
+      cumulative_grade: subject?.cumulative_grade,
     };
 
     subject?.results?.forEach((term) => {
       term?.continuous_assessment?.forEach((assessment) => {
         dataSourceItem[assessment[1]] = assessment[2];
       });
-      if (term.term_name === "First term") {
+      if (term.term_type === "First Term") {
         dataSourceItem["first_term"] = term.score;
-      } else if (term.term_name === "Second term") {
+      } else if (term.term_type === "Second Term") {
         dataSourceItem["second_term"] = term.score;
-      } else if (term.term_name === "Third Term") {
+      } else if (term.term_type === "Third Term") {
         dataSourceItem["third_term"] = term.score;
       }
     });

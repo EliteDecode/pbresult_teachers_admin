@@ -23,7 +23,9 @@ const addStudentResult = async (token, result) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  console.log(result);
   const response = await axios.post(`${API_URL}/result/bulk`, result, config);
+  console.log(response);
   return response.data;
 };
 

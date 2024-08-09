@@ -17,6 +17,7 @@ const ResultBroadsheet = () => {
   const { terms } = useSelector((state) => state.calender);
 
   const dispatch = useDispatch();
+  console.log(resultsPerTermClass?.data?.student_results.slice(0, 2));
 
   useEffect(() => {
     dispatch(getStudents());
