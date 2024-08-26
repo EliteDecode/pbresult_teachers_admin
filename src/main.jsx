@@ -11,15 +11,18 @@ import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
 import "react-toastify/dist/ReactToastify.css";
+import ErrorBoundary from "./pages/Error/ErrorBoundary.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PrimeReactProvider>
-        <App />
-        <ToastContainer />
-        <Toaster position="top-right" />
-      </PrimeReactProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <PrimeReactProvider>
+          <App />
+          <ToastContainer />
+          <Toaster position="top-right" />
+        </PrimeReactProvider>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
