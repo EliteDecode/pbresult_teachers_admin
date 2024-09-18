@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
-import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "@/lib/Loader";
 import ResultHeader from "@/components/dashboard/ResultHeader";
-import { getTermById, getTerms } from "@/features/calender/calenderSlice";
-import StudentPerCourseTables from "@/components/Tables/StudentPerCourseTables";
 import SubjectTables from "@/components/Tables/SubjectTables";
+import { getUserDetails } from "@/features/auth/authSlice";
+import { getTermById, getTerms } from "@/features/calender/calenderSlice";
 import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
+import { getStudents } from "@/features/students/studentSlice";
+import Loader from "@/lib/Loader";
+import { Box } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const StudentResult = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.grade);
@@ -17,6 +18,9 @@ const StudentResult = () => {
 
   useEffect(() => {
     dispatch(getTerms());
+    dispatch(getStudents());
+    dispatch(getUserDetails());
+
     if (terms) {
       const termId = terms?.data?.find(
         (term) => term?.active === "1" && term?.current === "1"

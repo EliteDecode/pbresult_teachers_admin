@@ -76,6 +76,7 @@ const UpdatePasswordForm = () => {
               <Input
                 placeholder="Enter Current Password"
                 name="current_password"
+                type={showPassword ? "text" : "password"}
                 value={formik.values.current_password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

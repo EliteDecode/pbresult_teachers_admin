@@ -1,23 +1,19 @@
 import BroadsheetTable from "@/components/Tables/BroadsheetTable.jsx";
-import { Button } from "@/components/ui/button";
 import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
 import { getStudents } from "@/features/students/studentSlice";
 import Error from "@/lib/Error";
 import Loader from "@/lib/Loader";
 import { Box } from "@mui/material";
 import { Typography } from "antd";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { usePDF } from "react-to-pdf";
 
 const ResultBroadsheet = () => {
   const { resultsPerTermClass } = useSelector((state) => state.grade);
   const { students, isLoading } = useSelector((state) => state.student);
   const { user } = useSelector((state) => state.pbTeachersAuth);
-  const { terms } = useSelector((state) => state.calender);
 
   const dispatch = useDispatch();
-  console.log(resultsPerTermClass?.data?.student_results.slice(0, 2));
 
   useEffect(() => {
     dispatch(getStudents());

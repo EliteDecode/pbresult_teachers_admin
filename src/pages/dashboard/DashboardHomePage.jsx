@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import HeaderTitle from "@/components/dashboard/HeaderTitle";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,27 +8,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Box, Grid } from "@mui/material";
-import dashboardImg from "../../assets/icons/dashboard.png";
 import { Typography } from "antd";
-import HeaderTitle from "@/components/dashboard/HeaderTitle";
+import React, { useEffect } from "react";
+import dashboardImg from "../../assets/icons/dashboard.png";
 
-import AreaChartComp from "../../components/Charts/AreaChartComp";
-import { NotificationDashboard, usersData } from "@/lib/utils";
-import notifyImg from "../../assets/icons/notification.png";
 import { Calendar } from "@/components/ui/calendar";
-import { useDispatch, useSelector } from "react-redux";
-import { getStudents } from "@/features/students/studentSlice";
-import studentsImg from "../../assets/icons/student.png";
-import calenderImg from "../../assets/icons/calendar.png";
-import resultImg from "../../assets/icons/results.png";
-import { Link } from "react-router-dom";
-import Loader from "@/lib/Loader";
-import {
-  getSessions,
-  getTermById,
-  getTerms,
-} from "@/features/calender/calenderSlice";
 import { getUserDetails } from "@/features/auth/authSlice";
+import { getTermById, getTerms } from "@/features/calender/calenderSlice";
+import { getStudents } from "@/features/students/studentSlice";
+import Loader from "@/lib/Loader";
+import { NotificationDashboard, usersData } from "@/lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import calenderImg from "../../assets/icons/calendar.png";
+import notifyImg from "../../assets/icons/notification.png";
+import resultImg from "../../assets/icons/results.png";
+import studentsImg from "../../assets/icons/student.png";
+import AreaChartComp from "../../components/Charts/AreaChartComp";
 
 const DashboardHomePage = () => {
   const [date, setDate] = React.useState(new Date());
