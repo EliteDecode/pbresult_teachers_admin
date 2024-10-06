@@ -59,19 +59,28 @@ const useAddStudentResultsForm = () => {
     initialValues,
     enableReinitialize: true,
     onSubmit: (values) => {
-      const resultData = studentsPerCourse?.subjects?.students?.map(
-        (student) => {
-          const ca = assessmentTypes.reduce((acc, grade) => {
-            acc[grade.id] =
+      const resultData = studentsPerCourse?.subjects?.students
+        ?.map((student) => {
+          const ca = {};
+          const allFieldsComplete = assessmentTypes.every((grade) => {
+            const score =
               values[`student_${student.student_id}_ca_${grade.id}`];
-            return acc;
-          }, {});
-          return {
-            student_id: student.student_id,
-            ca,
-          };
-        }
-      );
+            if (score !== undefined && score !== null && score !== "") {
+              ca[grade.id] = score;
+              return true;
+            }
+            return false;
+          });
+
+          if (allFieldsComplete) {
+            return {
+              student_id: student.student_id,
+              ca,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean); // Remove null entries
 
       const data = {
         term_id: termId,

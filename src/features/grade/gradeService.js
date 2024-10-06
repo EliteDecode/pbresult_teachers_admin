@@ -24,6 +24,8 @@ const addStudentResult = async (token, result) => {
     },
   };
 
+  console.log(result)
+
   const response = await axios.post(`${API_URL}/result/bulk`, result, config);
   return response.data;
 };

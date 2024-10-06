@@ -54,7 +54,7 @@ const SingleStudentResult = () => {
       </Box>
       <GoBackBtn />
 
-      {isLoading ? (
+      {isLoading && !singleStudentResult ? (
         <Loader />
       ) : singleStudentResult ? (
         <Box className="mt-5">
