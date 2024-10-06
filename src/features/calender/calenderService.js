@@ -82,6 +82,9 @@ const getTerms = async (token) => {
   };
 
   const response = await axios.get(`${API_URL}/term`, config);
+  if (response.data) {
+    localStorage.setItem("pbTeacherAdminTerms", JSON.stringify(response.data));
+  }
 
   return response.data;
 };
@@ -94,6 +97,13 @@ const getTermById = async (token, termId) => {
   };
 
   const response = await axios.get(`${API_URL}/term/${termId}`, config);
+
+  if (response.data) {
+    localStorage.setItem(
+      "pbTeacherSingleAdminTerm",
+      JSON.stringify(response.data)
+    );
+  }
 
   return response.data;
 };

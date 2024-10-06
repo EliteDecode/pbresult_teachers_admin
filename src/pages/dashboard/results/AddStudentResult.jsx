@@ -4,24 +4,22 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/lib/Loader";
 import SingleStudentResultHeader from "@/components/dashboard/ResultHeader";
-import { getTermGradingById, reset } from "@/features/grade/gradeSlice";
+import {
+  getAllStudentResultPerClassPerSubject,
+  getTermGradingById,
+  reset,
+} from "@/features/grade/gradeSlice";
 import { getStudentsOfOfferedCourse } from "@/features/students/studentSlice";
 import AddStudentResultsForm from "@/components/Forms/AddStudentResultsForm";
 import { getTermById, getTerms } from "@/features/calender/calenderSlice";
+import GoBackBtn from "@/components/dashboard/GoBackBtn";
 
 const AddStudentResult = () => {
   const dispatch = useDispatch();
   const { termId, subjectId, classId } = useParams();
 
-  const { isLoading: gradeLoading, isSuccess } = useSelector(
-    (state) => state.grade
-  );
-  const {
-    singleTerm,
-    terms,
-    isLoading: termLoading,
-  } = useSelector((state) => state.calender);
-  const { isLoading: studentLoading } = useSelector((state) => state.student);
+  const { isSuccess } = useSelector((state) => state.grade);
+  const { singleTerm, terms } = useSelector((state) => state.calender);
   const [loading, setLoading] = useState(false);
   const [gradingFetched, setGradingFetched] = useState(false);
 
@@ -33,6 +31,13 @@ const AddStudentResult = () => {
         classroom_id: classId,
         term_id: termId,
         subject_id: subjectId,
+      })
+    );
+    dispatch(
+      getAllStudentResultPerClassPerSubject({
+        classroomId: classId,
+        termId: termId,
+        subjectId: subjectId,
       })
     );
   }, [dispatch, classId, termId, subjectId]);
@@ -66,6 +71,7 @@ const AddStudentResult = () => {
   return (
     <Box>
       <SingleStudentResultHeader />
+      <GoBackBtn />
       <Box className="mt-5">
         {loading ? <Loader /> : <AddStudentResultsForm />}
       </Box>

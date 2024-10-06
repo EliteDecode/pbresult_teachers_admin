@@ -1,29 +1,27 @@
+import { useSelector } from "react-redux";
 import {
-  BrowserRouter,
   Navigate,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import Login from "./pages/auth/Login";
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
+import Login from "./pages/auth/Login";
 import DashboardHomePage from "./pages/dashboard/DashboardHomePage";
-import DashboardSettingsPage from "./pages/dashboard/settings/DashboardSettingsPage";
-import Page404 from "./pages/notFound/Page404";
-import StudentsPage from "./pages/dashboard/Students/StudentsPage";
 import AddStudentPage from "./pages/dashboard/Students/AddStudentPage";
 import EditStudentsPage from "./pages/dashboard/Students/EditStudentsPage";
 import SingleStudent from "./pages/dashboard/Students/SingleStudent";
-import { useSelector } from "react-redux";
+import StudentsPage from "./pages/dashboard/Students/StudentsPage";
+import DashboardSettingsPage from "./pages/dashboard/settings/DashboardSettingsPage";
+import Page404 from "./pages/notFound/Page404";
 
-import StudentsClassPage from "./pages/dashboard/Students/StudentsClassPage";
-import ChangePassword from "./pages/dashboard/settings/ChangePassword";
 import Profile from "./pages/dashboard/DashboardProfilePage";
-import StudentResult from "./pages/dashboard/results/StudentResult";
 import AddStudentResult from "./pages/dashboard/results/AddStudentResult";
-import SingleStudentResult from "./pages/dashboard/results/SingleStudentResult";
-import ViewStudentPerSubjectResult from "./pages/dashboard/results/ViewStudentPerSubjectResult";
 import ResultBroadsheet from "./pages/dashboard/results/ResultBroadsheet";
+import SingleStudentResult from "./pages/dashboard/results/SingleStudentResult";
 import SingleStudentResultBroadsheet from "./pages/dashboard/results/SingleStudentResultBroadsheet";
+import StudentResult from "./pages/dashboard/results/StudentResult";
+import ViewStudentPerSubjectResult from "./pages/dashboard/results/ViewStudentPerSubjectResult";
+import ChangePassword from "./pages/dashboard/settings/ChangePassword";
 
 // routes
 

@@ -2,11 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import calenderservice from "./calenderService";
 import { createAsyncThunkWithHandler } from "../api";
 
+const terms = JSON.parse(localStorage.getItem("pbTeacherAdminTerms"));
+const singleTerm = JSON.parse(localStorage.getItem("pbTeacherSingleAdminTerm"));
+
 const initialState = {
   sessions: null,
   singleSession: null,
-  terms: null,
-  singleTerm: null,
+  terms: terms ? terms : null,
+  singleTerm: singleTerm ? singleTerm : null,
   isError: false,
   isSuccess: false,
   isLoading: false,

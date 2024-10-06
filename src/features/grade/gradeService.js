@@ -25,7 +25,6 @@ const addStudentResult = async (token, result) => {
   };
 
   const response = await axios.post(`${API_URL}/result/bulk`, result, config);
-  console.log(response);
   return response.data;
 };
 
@@ -96,10 +95,6 @@ const getSingleStudentResultSheet = async (token, data) => {
       Authorization: `Bearer ${token}`,
     },
   };
-
-  console.log(
-    `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`
-  );
 
   const response = await axios.get(
     `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`,

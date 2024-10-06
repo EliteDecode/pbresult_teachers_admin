@@ -78,31 +78,35 @@ const Sidebar = ({ setIsSidebar, isSidebar }) => {
                   </Typography>
                 </Box>
 
-                {item.content.map((item2, index2) => (
-                  <Link
-                    key={index2}
-                    onClick={handleSidebarToggle}
-                    to={item2.link}
-                    className={`flex items-center space-x-2 p-2 mb-1 rounded-lg ${
-                      location.pathname.includes(item2.link)
-                        ? " bg-gray-100"
-                        : "bg-[#fff] hover:bg-gray-100 border-[#fafafa]"
-                    }     cursor-pointer`}>
-                    <img
-                      src={item2.Icon}
-                      alt="sidebar icon"
-                      className="sm:w-[16px] w-[20px]"
-                      style={{
-                        filter: location.pathname.includes(item2.link)
-                          ? "grayscale(0%) hue-rotate(280deg)"
-                          : "grayscale(100%)",
-                      }}
-                    />
-                    <Typography className="-mt-0.5 sm:text-[12px] text-[17px] font-semibold">
-                      {item2.Title}
-                    </Typography>
-                  </Link>
-                ))}
+                {item.content
+                  .filter(
+                    (item2) => !(item2.Title === "Students" && !user?.classroom)
+                  )
+                  .map((item2, index2) => (
+                    <Link
+                      key={index2}
+                      onClick={handleSidebarToggle}
+                      to={item2.link}
+                      className={`flex items-center space-x-2 p-2 mb-1 rounded-lg ${
+                        location.pathname.includes(item2.link)
+                          ? " bg-gray-100"
+                          : "bg-[#fff] hover:bg-gray-100 border-[#fafafa]"
+                      }     cursor-pointer`}>
+                      <img
+                        src={item2.Icon}
+                        alt="sidebar icon"
+                        className="sm:w-[16px] w-[20px]"
+                        style={{
+                          filter: location.pathname.includes(item2.link)
+                            ? "grayscale(0%) hue-rotate(280deg)"
+                            : "grayscale(100%)",
+                        }}
+                      />
+                      <Typography className="-mt-0.5 sm:text-[12px] text-[17px] font-semibold">
+                        {item2.Title}
+                      </Typography>
+                    </Link>
+                  ))}
               </Box>
             );
           })}

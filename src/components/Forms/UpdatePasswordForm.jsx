@@ -54,6 +54,7 @@ const UpdatePasswordForm = () => {
       toast.success("Congratulations Password Changed Successfully");
       dispatch(reset());
       dispatch(getUserDetails());
+      navigate("/dashboard");
       formik.resetForm();
     }
 
@@ -72,7 +73,9 @@ const UpdatePasswordForm = () => {
         <form onSubmit={formik.handleSubmit}>
           <Box className="mt-5 w-full space-y-4">
             <Box>
-              <Label className="mb-1">Enter Current Password</Label>
+              <Label className="mb-1">
+                Enter Password Given To You By Admin
+              </Label>
               <Input
                 placeholder="Enter Current Password"
                 name="current_password"
@@ -89,7 +92,9 @@ const UpdatePasswordForm = () => {
               ) : null}
             </Box>
             <Box>
-              <Label className="mb-1">New Password</Label>
+              <Label className="mb-1">
+                Enter A New Password You Can Remember
+              </Label>
               <Input
                 placeholder="Password"
                 type={showPassword ? "text" : "password"}
@@ -119,7 +124,9 @@ const UpdatePasswordForm = () => {
             </Box>
 
             <Box>
-              <Label className="mb-1">Confirm New Password</Label>
+              <Label className="mb-1">
+                Confirm The New Password You Entered Again
+              </Label>
               <Input
                 placeholder="Password"
                 type={showPassword ? "text" : "password"}

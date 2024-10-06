@@ -4,16 +4,14 @@ import React from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import useAddStudentResultsForm from "@/hooks/form-hooks/useAddStudentResultsForm";
 import { useNavigate } from "react-router-dom";
-
-// Generate the validation schema based on the assessment types
 
 const AddStudentResultsForm = () => {
   const {
     subjectResult,
     formik,
-    students,
     assessmentTypes,
     isLoading,
     studentsPerCourse,
@@ -21,87 +19,96 @@ const AddStudentResultsForm = () => {
   const navigate = useNavigate();
 
   return (
-    <Box>
+    <div className="max-w-5xl mx-auto p-4">
       {studentsPerCourse?.subjects?.students?.length < 1 ? (
-        <Box className="bg-white rounded-md p-5">
-          <Typography>No Student Has Selected this subject</Typography>
-          <Button size="sm" className="mt-5" onClick={() => navigate(-1)}>
-            Retun Back
-          </Button>
-        </Box>
-      ) : (
-        <Box className="bg-white rounded-md p-5">
-          <Typography className="text-[13px] font-bold">
-            {subjectResult} Result
+        <Card className="p-6 text-center">
+          <Typography className="text-lg mb-4">
+            No Student Has Selected this subject
           </Typography>
-          <form onSubmit={formik.handleSubmit}>
-            <Box className="space-y-4">
+          <Button size="sm" onClick={() => navigate(-1)}>
+            Return Back
+          </Button>
+        </Card>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <Typography className="text-xl font-bold">
+              {subjectResult} Results
+            </Typography>
+            <Button variant="outline" size="sm" onClick={() => navigate(-1)}>
+              Return Back
+            </Button>
+          </div>
+
+          <form onSubmit={formik.handleSubmit} className="">
+            <div className=" grid sm:grid-cols-2 grid-cols-1 sm:gap-8 gap-4">
               {studentsPerCourse?.subjects?.students?.map((student, index) => (
-                <Box className="flex items-center space-x-4" key={index}>
-                  <Box>
-                    <Label className="font-normal text-[12px] mb-1">
-                      Student
-                      <Input readOnly value={`${student?.student_name}`} />
-                    </Label>
-                  </Box>
-                  <Box className="flex items-center space-x-2">
-                    {assessmentTypes.map((grade, i) => (
-                      <Box key={i}>
-                        <Label className="font-normal text-[12px] mb-1">
-                          {grade?.name}
-                        </Label>
-                        <Input
-                          placeholder={`Max score is ${grade?.max_score}`}
-                          className="text-[12px]"
-                          name={`student_${student.student_id}_ca_${grade.id}`}
-                          value={
-                            formik.values[
-                              `student_${student.student_id}_ca_${grade.id}`
-                            ]
-                          }
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        {formik.touched[
-                          `student_${student.student_id}_ca_${grade.id}`
-                        ] &&
-                          formik.errors[
-                            `student_${student.student_id}_ca_${grade.id}`
-                          ] && (
-                            <span className="text-red-500 text-[12px]">
-                              {
-                                formik.errors[
+                <Card key={index} className="overflow-hidden">
+                  <div className="border-l-4 border-primary">
+                    <div className="p-4">
+                      <div className="mb-3">
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {student?.student_name}
+                        </h3>
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {assessmentTypes.map((grade, i) => (
+                          <div key={i} className="space-y-2">
+                            <Label className="text-sm font-medium flex justify-between">
+                              <span>{grade?.name}</span>
+                              <span className="text-gray-500 text-xs">
+                                Max: {grade?.max_score}
+                              </span>
+                            </Label>
+                            <Input
+                              placeholder="Enter score"
+                              className="text-sm"
+                              name={`student_${student.student_id}_ca_${grade.id}`}
+                              value={
+                                formik.values[
                                   `student_${student.student_id}_ca_${grade.id}`
                                 ]
                               }
-                            </span>
-                          )}
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                            />
+                            {formik.touched[
+                              `student_${student.student_id}_ca_${grade.id}`
+                            ] &&
+                              formik.errors[
+                                `student_${student.student_id}_ca_${grade.id}`
+                              ] && (
+                                <p className="text-red-500 text-xs mt-1">
+                                  {
+                                    formik.errors[
+                                      `student_${student.student_id}_ca_${grade.id}`
+                                    ]
+                                  }
+                                </p>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               ))}
-            </Box>
-            <Box className="space-x-2">
+            </div>
+
+            <div className="mt-6">
               <Button
                 type="submit"
-                size="sm"
-                className="mt-5"
+                className="w-full"
+                size="lg"
                 disabled={isLoading}>
-                {isLoading ? "Please wait..." : "Submit Result"}
+                {isLoading ? "Submitting Results..." : "Submit All Results"}
               </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                className="mt-5"
-                onClick={() => navigate(-1)}>
-                Retun Back
-              </Button>
-            </Box>
+            </div>
           </form>
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -20,8 +20,37 @@ const useEditStudentResultsForm = () => {
   const assessmentTypes =
     singleStudentResult?.data?.continuous_assessment || [];
 
+  // Formik initialization
+  const formik = useFormik({
+    initialValues: assessmentTypes.reduce((acc, [id, name, score]) => {
+      acc[id] = score || "";
+      return acc;
+    }, {}),
+    onSubmit: (values) => {
+      const data = {
+        submitted: 1,
+        studentTermResultId: singleStudentResult?.data?.id,
+        continuous_assessment: [values],
+      };
+
+      dispatch(editStudentResult(data));
+    },
+  });
+
+  // Update Formik values when singleStudentResult changes
   useEffect(() => {
-    if (isSuccess && message == "result editted successfuly") {
+    if (singleStudentResult) {
+      const updatedValues = assessmentTypes.reduce((acc, [id, name, score]) => {
+        acc[id] = score || "";
+        return acc;
+      }, {});
+
+      formik.setValues(updatedValues); // Reset the form values when singleStudentResult changes
+    }
+  }, [singleStudentResult]);
+
+  useEffect(() => {
+    if (isSuccess && message === "result editted successfuly") {
       toast.success("Result updated successfully");
       navigate(0);
     }
@@ -33,25 +62,7 @@ const useEditStudentResultsForm = () => {
     if (isError || isSuccess) {
       dispatch(reset());
     }
-  }, [isLoading, isError, isSuccess]);
-
-  const initialValues = assessmentTypes.reduce((acc, [id, name, score]) => {
-    acc[id] = score || "";
-    return acc;
-  }, {});
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    onSubmit: (values) => {
-      const data = {
-        submitted: 1,
-        studentTermResultId: singleStudentResult?.data?.id,
-        continuous_assessment: [values],
-      };
-
-      dispatch(editStudentResult(data));
-    },
-  });
+  }, [isLoading, isError, isSuccess, message, dispatch, navigate]);
 
   return {
     formik,

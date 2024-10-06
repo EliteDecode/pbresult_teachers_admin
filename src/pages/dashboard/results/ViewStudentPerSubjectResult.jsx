@@ -8,6 +8,7 @@ import StudentPerCourseTables from "@/components/Tables/StudentPerCourseTables";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllStudentResultPerClassPerSubject } from "@/features/grade/gradeSlice";
 import { Button } from "@/components/ui/button";
+import GoBackBtn from "@/components/dashboard/GoBackBtn";
 
 const ViewStudentPerSubjectResult = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const ViewStudentPerSubjectResult = () => {
   return (
     <Box>
       <ResultHeader />
+      <GoBackBtn />
       <Box className="mt-5">
         {isLoading ? (
           <Loader />

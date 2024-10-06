@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import { Box, Grid } from "@mui/material";
@@ -9,9 +10,32 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/lib/Loader";
 import Error from "@/lib/Error";
 import ProfileDetails from "@/components/dashboard/ProfileDetails";
+import { getTermById, getTerms } from "@/features/calender/calenderSlice";
+import { getUserDetails } from "@/features/auth/authSlice";
+import { getStudents } from "@/features/students/studentSlice";
+import GoBackBtn from "@/components/dashboard/GoBackBtn";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { students } = useSelector((state) => state.student);
   const { isLoading, user } = useSelector((state) => state.pbTeachersAuth);
+  const { terms, isLoading: loading } = useSelector((state) => state.calender);
+
+  useEffect(() => {
+    dispatch(getStudents());
+    dispatch(getTerms());
+    dispatch(getUserDetails());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (terms) {
+      const termId = terms?.data?.find((term) => term?.current === 1)?.id;
+      if (termId) {
+        dispatch(getTermById(termId));
+      }
+    }
+  }, [terms, dispatch]);
 
   return (
     <Box>
@@ -30,6 +54,8 @@ const Profile = () => {
           </Box>
         </Box>
       </Box>
+
+      <GoBackBtn />
 
       {isLoading ? (
         <Loader />

@@ -1,25 +1,28 @@
 import { addStudentResult, reset } from "@/features/grade/gradeSlice";
 import { addStudentResultSchema } from "@/lib/schemas";
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 const useAddStudentResultsForm = () => {
   const { studentsPerCourse } = useSelector((state) => state.student);
-  const { singleTermGradings, isLoading, isError, isSuccess, message } =
-    useSelector((state) => state.grade);
+  const {
+    singleTermGradings,
+    resultsPerTermSubjectClass,
+    isLoading,
+    isError,
+    isSuccess,
+    message,
+  } = useSelector((state) => state.grade);
   const { user } = useSelector((state) => state.pbTeachersAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const assessmentTypes = singleTermGradings?.data?.assessment_type_log || [];
-  //   const validationSchema = addStudentResultSchema(assessmentTypes);
-
   const { subjectId, termId } = useParams();
 
-  //This is to get the name of the subject and pass it to the header on the main page
   const subjectResult = user?.subjects?.find(
     (subject) => subject?.id == subjectId
   )?.name;
@@ -39,16 +42,22 @@ const useAddStudentResultsForm = () => {
     }
   }, [isLoading, isError, isSuccess]);
 
-  const formik = useFormik({
-    initialValues: studentsPerCourse?.subjects?.students?.reduce(
-      (acc, student) => {
-        assessmentTypes.forEach((grade) => {
-          acc[`student_${student.student_id}_ca_${grade.id}`] = "";
+  const initialValues = useMemo(() => {
+    const values = {};
+    if (resultsPerTermSubjectClass?.data) {
+      resultsPerTermSubjectClass.data.forEach((result) => {
+        result.continuous_assessment.forEach((assessment) => {
+          const [assessmentId, assessmentName, score] = assessment;
+          values[`student_${result.student_id}_ca_${assessmentId}`] = score;
         });
-        return acc;
-      },
-      {}
-    ),
+      });
+    }
+    return values;
+  }, [resultsPerTermSubjectClass]);
+
+  const formik = useFormik({
+    initialValues,
+    enableReinitialize: true,
     onSubmit: (values) => {
       const resultData = studentsPerCourse?.subjects?.students?.map(
         (student) => {
@@ -70,8 +79,6 @@ const useAddStudentResultsForm = () => {
         submitted: 1,
         result_data: resultData,
       };
-
-      // console.log(data);
 
       dispatch(addStudentResult(data));
     },

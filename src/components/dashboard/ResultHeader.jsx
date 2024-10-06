@@ -5,13 +5,15 @@ import { Box } from "@mui/material";
 import { ViewModule } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import { useSelector } from "react-redux";
 
 const SingleStudentHeader = () => {
+  const { user } = useSelector((state) => state.pbTeachersAuth);
   return (
     <div>
       {" "}
       <Box className="flex space-x-2 sm:justify-end justify-center items-center ">
-        <Box className="bg-white flex justify-between my-3 rounded-md px-4  w-full py-5">
+        <Box className="bg-white flex flex-wrap  justify-between my-3 rounded-md px-4  w-full py-5">
           <Box className="flex items-center space-x-2">
             <img src={teachersImg} alt="dashboard icon" className="w-[32px]" />
             <Box>
@@ -25,14 +27,13 @@ const SingleStudentHeader = () => {
               </Typography>
             </Box>
           </Box>
-          <Link to="/dashboard/result/broadsheet">
-            <Button
-              variant="secondary"
-              className="border-primary"
-              icon={<ViewModule />}>
-              View Result Broadsheet
-            </Button>
-          </Link>
+          {user?.classroom && (
+            <Link to="/dashboard/result/broadsheet" className="sm:mt-0 mt-5">
+              <Button className="border-primary" icon={<ViewModule />}>
+                View Result Broadsheet
+              </Button>
+            </Link>
+          )}
         </Box>
       </Box>
     </div>

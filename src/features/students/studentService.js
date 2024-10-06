@@ -47,6 +47,10 @@ const getStudentsOfOfferedCourse = async (token, data) => {
     },
   };
 
+  console.log(
+    `${API_URL}/classroom/${data.classroom_id}/subject/${data.subject_id}/term/${data.term_id}/students`
+  );
+
   const response = await axios.get(
     `${API_URL}/classroom/${data.classroom_id}/subject/${data.subject_id}/term/${data.term_id}/students`,
     config

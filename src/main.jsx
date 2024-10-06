@@ -15,14 +15,14 @@ import ErrorBoundary from "./pages/Error/ErrorBoundary.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <Provider store={store}>
-        <PrimeReactProvider>
-          <App />
-          <ToastContainer />
-          <Toaster position="top-right" />
-        </PrimeReactProvider>
-      </Provider>
-    </ErrorBoundary>
+    <Provider store={store}>
+      <PrimeReactProvider>
+        <App />
+        <ToastContainer />
+        <Toaster position="top-right" />
+      </PrimeReactProvider>
+    </Provider>
+    {/* <ErrorBoundary>
+    </ErrorBoundary> */}
   </React.StrictMode>
 );

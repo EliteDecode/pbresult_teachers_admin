@@ -154,8 +154,7 @@ const StudentPerCourseTables = () => {
     },
     {
       title: "Action",
-      width: 150,
-      fixed: "right",
+
       render: (_, record) => (
         <Space>
           <Link
@@ -163,7 +162,7 @@ const StudentPerCourseTables = () => {
             <Button
               size="medium"
               className="border border-primary text-primary text-[10px] font-semibold ">
-              View Result
+              Edit Result
             </Button>
           </Link>
         </Space>

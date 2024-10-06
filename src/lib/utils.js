@@ -6,21 +6,10 @@ export function cn(...inputs) {
 }
 
 import overviewImg from "../assets/icons/dashboard.png";
-import schoolImg from "../assets/icons/education.png";
-import transactionImg from "../assets/icons/card-payment.png";
-import settings from "../assets/icons/settings-gears.png";
-import profile from "../assets/icons/profile.png";
-import schoolimg from "../assets/icons/education.png";
-import usersImg from "../assets/icons//man.png";
-import earningsImg from "../assets/icons/card-payment.png";
-import teachersImg from "../assets/icons/teach.png";
-import studentsImg from "../assets/icons/student.png";
-import parentImg from "../assets/icons/parents.png";
-import classesImg from "../assets/icons/online-learning.png";
-import resultImg from "../assets/icons/results.png";
-import calenderImg from "../assets/icons/calendar.png";
-import gradeSystemImg from "../assets/icons/stadistics.png";
 import pwdImg from "../assets/icons/padlock.png";
+import profile from "../assets/icons/profile.png";
+import resultImg from "../assets/icons/results.png";
+import studentsImg from "../assets/icons/student.png";
 
 export const sidebar = [
   {
@@ -57,11 +46,11 @@ export const sidebar = [
   {
     title: "Settings",
     content: [
-      {
-        Title: "Settings",
-        Icon: overviewImg,
-        link: "settings",
-      },
+      // {
+      //   Title: "Settings",
+      //   Icon: overviewImg,
+      //   link: "settings",
+      // },
       {
         Title: "Update Password",
         Icon: pwdImg,

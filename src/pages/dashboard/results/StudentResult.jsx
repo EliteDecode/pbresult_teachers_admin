@@ -1,3 +1,4 @@
+import GoBackBtn from "@/components/dashboard/GoBackBtn";
 import ResultHeader from "@/components/dashboard/ResultHeader";
 import SubjectTables from "@/components/Tables/SubjectTables";
 import { getUserDetails } from "@/features/auth/authSlice";
@@ -36,6 +37,7 @@ const StudentResult = () => {
   return (
     <Box>
       <ResultHeader />
+      <GoBackBtn />
       <Box className="mt-5">
         {isLoading || loadingTerm ? (
           <Loader />
