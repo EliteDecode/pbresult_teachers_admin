@@ -1,52 +1,58 @@
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
-import html2pdf from "html2pdf.js";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { usePDF } from "react-to-pdf";
+import { Button } from "../ui/button";
 
 const SingleStudentResultBroadSheetDetails = () => {
   const { singleStudentResultSheet } = useSelector((state) => state.grade);
   const { user } = useSelector((state) => state.pbTeachersAuth);
   const componentRef = useRef();
 
-  const handleDownloadPDF = () => {
-    const element = componentRef.current;
-    const opt = {
-      margin: 1,
-      filename: `${singleStudentResultSheet?.data?.student_name}_result_sheet.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+  const { toPDF, targetRef } = usePDF({
+    filename: `${singleStudentResultSheet?.data?.student_name}.pdf`,
+  });
+
+  const processAssessments = (assessments) => {
+    const testScores = assessments
+      .slice(0, -1)
+      .map((assessment) => assessment[2]);
+    const examScore = assessments[assessments.length - 1][2];
+    const average =
+      testScores.reduce((sum, score) => sum + parseInt(score), 0) /
+      testScores.length;
+
+    return {
+      testScores,
+      average: average.toFixed(2),
+      examScore,
     };
-
-    html2pdf().set(opt).from(element).save();
-  };
-
-  //make this dynamic calculation
-  const calculateTestAverage = (tests) => {
-    const scores = tests.map((test) => parseInt(test[2]));
-    return scores.reduce((a, b) => a + b, 0) / scores.length;
   };
 
   return (
     <div className="p-4">
-      <button
-        onClick={handleDownloadPDF}
-        className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Download Result Sheet as PDF
-      </button>
+      <Button
+        onClick={() => {
+          toPDF();
+        }}>
+        Download Result
+      </Button>
       <div
-        ref={componentRef}
+        ref={targetRef}
         className="p-8 bg-white"
         style={{ minWidth: "1000px" }}>
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">
-            MINISTRY OF EDUCATION, EKITI STATE
+            MINISTRY OF EDUCATION, SCIENCE AND TECHNOLOGY
           </h1>
           <h2 className="text-xl font-semibold uppercase">
             {user?.school?.name}
           </h2>
           <p>
-            REPORT FOR: 2022/2023 &nbsp;&nbsp;&nbsp;&nbsp; TERM:{" "}
-            {singleStudentResultSheet?.data.subjects[0].results[0].term_name}
+            REPORT FOR:{" "}
+            {singleStudentResultSheet?.data.subjects[0].results[0].term_name}{" "}
+            TERM {new Date().getFullYear()}
           </p>
         </div>
 
@@ -65,59 +71,41 @@ const SingleStudentResultBroadSheetDetails = () => {
                 CONTINUOUS ASSESSMENT
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                Exam
-                <br />
-                100%
+                EoTT 100%
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                Last Term
-                <br />
-                Cum.
+                TOTAL 100%
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                TOTAL
-                <br />
-                100%
+                Last Term Cum.
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                Class
-                <br />
-                Avg
+                Total Cum.
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                GRADE
+                Class Avg.
               </th>
               <th rowSpan="2" className="border border-gray-300 p-1">
-                POSITION
+                Position
+              </th>
+              <th rowSpan="2" className="border border-gray-300 p-1">
+                Grade
+              </th>
+              <th rowSpan="2" className="border border-gray-300 p-1">
+                Remark
               </th>
             </tr>
             <tr className="bg-gray-100">
-              {/* Still not dynamic */}
-              <th className="border border-gray-300 p-1">
-                PT
-                <br />
-                100%
-              </th>
-              <th className="border border-gray-300 p-1">
-                PT2
-                <br />
-                100%
-              </th>
-              <th className="border border-gray-300 p-1">
-                ASS
-                <br />
-                100%
-              </th>
+              <th className="border border-gray-300 p-1">a 100%</th>
+              <th className="border border-gray-300 p-1">b 100%</th>
+              <th className="border border-gray-300 p-1">c Avg.</th>
             </tr>
           </thead>
           <tbody>
             {singleStudentResultSheet?.data?.subjects.map((subject) => {
               const result = subject.results[0];
-              const tests = result.continuous_assessment.filter((assessment) =>
-                assessment[1].startsWith("Test")
-              );
-              const exam = result.continuous_assessment.find(
-                (assessment) => assessment[1] === "Exams"
+              const { testScores, average, examScore } = processAssessments(
+                result.continuous_assessment
               );
               return (
                 <tr key={subject.subject_id}>
@@ -125,21 +113,23 @@ const SingleStudentResultBroadSheetDetails = () => {
                     {subject.subject_name}
                   </td>
                   <td className="border border-gray-300 p-1">
-                    {tests[0] ? tests[0][2] : ""}
+                    {testScores[0] || ""}
                   </td>
                   <td className="border border-gray-300 p-1">
-                    {tests[1] ? tests[1][2] : ""}
+                    {testScores[1] || ""}
                   </td>
-                  <td className="border border-gray-300 p-1">
-                    {calculateTestAverage(tests).toFixed(2)}
-                  </td>
-                  <td className="border border-gray-300 p-1">
-                    {exam ? exam[2] : ""}
-                  </td>
-                  <td className="border border-gray-300 p-1"></td>
+                  <td className="border border-gray-300 p-1">{average}</td>
+                  <td className="border border-gray-300 p-1">{examScore}</td>
                   <td className="border border-gray-300 p-1">{result.score}</td>
                   <td className="border border-gray-300 p-1"></td>
-                  <td className="border border-gray-300 p-1">{result.grade}</td>
+                  <td className="border border-gray-300 p-1"></td>
+                  <td className="border border-gray-300 p-1">
+                    {subject.total_cumulative_score}
+                  </td>
+                  <td className="border border-gray-300 p-1"></td>
+                  <td className="border border-gray-300 p-1">
+                    {subject.cumulative_grade}
+                  </td>
                   <td className="border border-gray-300 p-1"></td>
                 </tr>
               );
