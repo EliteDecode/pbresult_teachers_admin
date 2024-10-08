@@ -27,13 +27,13 @@ import {
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const SingleStudentHeader = ({ studentId, terms }) => {
+const SingleStudentHeader = ({ studentId, classId }) => {
   const [session, setSession] = useState();
   const navigate = useNavigate();
   const { sessions } = useSelector((state) => state.calender);
 
   const handleSelectTerm = () => {
-    navigate(`/dashboard/students/result/${studentId}/${session}`);
+    navigate(`/dashboard/students/result/${studentId}/${session}/${classId}`);
   };
   return (
     <div>

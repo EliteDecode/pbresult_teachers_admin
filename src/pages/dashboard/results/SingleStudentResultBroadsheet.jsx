@@ -11,7 +11,7 @@ import { usePDF } from "react-to-pdf";
 
 const SingleStudentResultBroadsheet = () => {
   const { isLoading } = useSelector((state) => state.grade);
-  const { studentId, sessionId } = useParams();
+  const { studentId, sessionId, classId } = useParams();
 
   const dispatch = useDispatch();
 
@@ -19,7 +19,7 @@ const SingleStudentResultBroadsheet = () => {
     dispatch(getStudents());
     dispatch(getTerms());
     dispatch(getSessions());
-    dispatch(getSingleStudentResultSheet({ studentId, sessionId }));
+    dispatch(getSingleStudentResultSheet({ studentId, sessionId, classId }));
   }, []);
 
   return (

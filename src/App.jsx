@@ -100,7 +100,7 @@ export default function App() {
           element: !token ? <Navigate to="/login" /> : <ResultBroadsheet />,
         },
         {
-          path: "/dashboard/students/result/:studentId/:sessionId",
+          path: "/dashboard/students/result/:studentId/:sessionId/:classId",
           element: !token ? (
             <Navigate to="/login" />
           ) : (

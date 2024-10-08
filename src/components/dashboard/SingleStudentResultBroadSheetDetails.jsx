@@ -1,18 +1,10 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { usePDF } from "react-to-pdf";
-import { Button } from "../ui/button";
 
 const SingleStudentResultBroadSheetDetails = () => {
   const { singleStudentResultSheet } = useSelector((state) => state.grade);
   const { user } = useSelector((state) => state.pbTeachersAuth);
   const componentRef = useRef();
-
-  const { toPDF, targetRef } = usePDF({
-    filename: `${singleStudentResultSheet?.data?.student_name}.pdf`,
-  });
 
   const processAssessments = (assessments) => {
     const testScores = assessments
@@ -32,14 +24,8 @@ const SingleStudentResultBroadSheetDetails = () => {
 
   return (
     <div className="p-4">
-      <Button
-        onClick={() => {
-          toPDF();
-        }}>
-        Download Result
-      </Button>
       <div
-        ref={targetRef}
+        ref={componentRef}
         className="p-8 bg-white"
         style={{ minWidth: "1000px" }}>
         <div className="text-center mb-6">
@@ -122,10 +108,10 @@ const SingleStudentResultBroadSheetDetails = () => {
                   <td className="border border-gray-300 p-1">{examScore}</td>
                   <td className="border border-gray-300 p-1">{result.score}</td>
                   <td className="border border-gray-300 p-1"></td>
-                  <td className="border border-gray-300 p-1"></td>
                   <td className="border border-gray-300 p-1">
                     {subject.total_cumulative_score}
                   </td>
+                  <td className="border border-gray-300 p-1"></td>
                   <td className="border border-gray-300 p-1"></td>
                   <td className="border border-gray-300 p-1">
                     {subject.cumulative_grade}

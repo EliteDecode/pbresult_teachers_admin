@@ -24,8 +24,6 @@ const addStudentResult = async (token, result) => {
     },
   };
 
-  console.log(result)
-
   const response = await axios.post(`${API_URL}/result/bulk`, result, config);
   return response.data;
 };
@@ -83,12 +81,22 @@ const getAllStudentResultPerClass = async (token, data) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(
-    `${API_URL}/result/classroom/${data.classId}`,
+
+  const averageResponse = await axios.get(
+    `${API_URL}/classroom/${data.classId}/average`,
     config
   );
 
-  return response.data;
+  if (averageResponse.data.status) {
+    const termResponse = await axios.get(
+      `${API_URL}/result/classroom/${data.classId}/term/${data.termId}`,
+      config
+    );
+
+    return termResponse.data;
+  }
+
+  return null;
 };
 
 const getSingleStudentResultSheet = async (token, data) => {
@@ -98,14 +106,20 @@ const getSingleStudentResultSheet = async (token, data) => {
     },
   };
 
-  const response = await axios.get(
-    `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`,
+  const averageResponse = await axios.get(
+    `${API_URL}/classroom/${data.classId}/average`,
     config
   );
 
-  console.log(response.data);
+  if (averageResponse.data.status) {
+    const response = await axios.get(
+      `${API_URL}/result/cumulative/student/${data.studentId}/session/${data.sessionId}`,
+      config
+    );
+    return response.data;
+  }
 
-  return response.data;
+  return null;
 };
 
 const grade = {

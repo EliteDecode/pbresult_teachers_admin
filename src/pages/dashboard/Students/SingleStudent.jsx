@@ -24,7 +24,11 @@ const SingleStudent = () => {
 
   return (
     <Box>
-      <SingleStudentHeader studentId={singleStudent?.data?.id} terms={terms} />
+      <SingleStudentHeader
+        studentId={singleStudent?.data?.id}
+        classId={singleStudent?.data?.classroom?.classroom_id}
+        terms={terms}
+      />
       <Box role="presentation">
         <Breadcrumbs aria-label="breadcrumb">
           <Link
