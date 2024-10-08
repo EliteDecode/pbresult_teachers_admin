@@ -1,146 +1,15 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { ArrowBack } from "@mui/icons-material";
+import useExportResultBroadsheet from "@/hooks/useExportResultBroadsheet";
+import useResultBroadsheet from "@/hooks/useResultBroadsheet";
 import Loader from "@/lib/Loader";
-import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
-import { getStudents } from "@/features/students/studentSlice";
+import { ArrowBack } from "@mui/icons-material";
+import { Download } from "lucide-react";
+import React from "react";
 
 export default function ResultBroadsheet() {
-  const { resultsPerTermClass } = useSelector((state) => state.grade);
-  const { students, isLoading } = useSelector((state) => state.student);
-  const { singleTerm } = useSelector((state) => state.calender);
-  const { user } = useSelector((state) => state.pbTeachersAuth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const tableRef = useRef(null);
-
-  useEffect(() => {
-    dispatch(getStudents());
-    if (user?.classroom?.id) {
-      dispatch(
-        getAllStudentResultPerClass({
-          classId: user?.classroom?.id,
-          termId: singleTerm?.data?.id,
-        })
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    const table = tableRef.current;
-    if (table) {
-      const handleScroll = () => {
-        const scrollLeft = table.scrollLeft;
-        const scrollTop = table.scrollTop;
-        const firstCol = table.querySelector("thead th:first-child");
-        const headerRow = table.querySelector("thead");
-
-        firstCol.style.transform = `translateX(${scrollLeft}px)`;
-        headerRow.style.transform = `translateY(${scrollTop}px)`;
-      };
-
-      table.addEventListener("scroll", handleScroll);
-      return () => table.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
-
-  const allSubjects = [
-    ...new Set(
-      resultsPerTermClass?.data?.student_results.flatMap((student) =>
-        student.subjects.map((subject) => subject.name)
-      )
-    ),
-  ];
-
-  const getAssessmentTypes = () => {
-    const allTypes = new Set();
-    resultsPerTermClass?.data?.student_results.forEach((student) => {
-      student.subjects.forEach((subject) => {
-        subject.results[0]?.continuous_assessment.forEach((assessment) => {
-          allTypes.add(assessment[1]);
-        });
-      });
-    });
-    return Array.from(allTypes);
-  };
-
-  const assessmentTypes = getAssessmentTypes();
-
-  const exportToExcel = () => {
-    const worksheet = XLSX.utils.aoa_to_sheet([]);
-    const workbook = XLSX.utils.book_new();
-
-    // Create headers
-    const headers = [
-      ["Jonathan Groups of School"],
-      [`Class: ${resultsPerTermClass?.data?.classroom_name}`],
-      [`Total Students: ${resultsPerTermClass?.data?.student_results?.length}`],
-      [`Results Available: ${allSubjects.length}`],
-      ["Class Teacher: Babatunde Samuel"],
-      [],
-      [
-        "Name",
-        ...allSubjects.flatMap((subject) => {
-          return [
-            ...assessmentTypes,
-            "Term Cum.",
-            "Last Term Cum.",
-            "Total Cum.",
-            "Class Avg.",
-            "Position",
-            "Grade",
-          ].map((header) => `${subject} - ${header}`);
-        }),
-      ],
-    ];
-
-    // Create data rows
-    const data = resultsPerTermClass?.data?.student_results.map((student) => {
-      const row = [student.student_name];
-
-      allSubjects.forEach((subjectName) => {
-        const subjectData = student.subjects.find(
-          (s) => s.name === subjectName
-        );
-
-        // Add assessment scores
-        assessmentTypes.forEach((type) => {
-          const assessment =
-            subjectData?.results[0]?.continuous_assessment.find(
-              (a) => a[1] === type
-            );
-          row.push(assessment ? assessment[2] : "N/A");
-        });
-
-        // Add other columns
-        row.push(
-          subjectData?.results?.[0]?.cumulative_score || 0,
-          "-",
-          subjectData?.average_score || 0,
-          subjectData?.results?.[0]?.class_average || 0,
-          "-",
-          subjectData?.average_grade || "-"
-        );
-      });
-
-      return row;
-    });
-
-    const finalData = [...headers, ...data];
-    XLSX.utils.sheet_add_aoa(worksheet, finalData);
-
-    // Set column widths
-    const columnWidths = finalData[6].map(() => ({ wch: 15 }));
-    columnWidths[0] = { wch: 25 }; // Make the name column wider
-    worksheet["!cols"] = columnWidths;
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Result Broadsheet");
-    XLSX.writeFile(workbook, "result_broadsheet.xlsx");
-  };
+  const { assessmentTypes, allSubjects, isLoading, resultsPerTermClass, user } =
+    useResultBroadsheet();
+  const { exportToExcel, tableRef } = useExportResultBroadsheet();
 
   return (
     <>
