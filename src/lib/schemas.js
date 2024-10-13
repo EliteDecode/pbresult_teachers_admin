@@ -176,10 +176,10 @@ export const addStudentSchema = yup.object().shape({
   nin: yup.string(),
   gender: yup.string().required("Gender is required"),
   password: yup.string().min(8, "Password must be at least 8 characters long"),
-  picture: yup.mixed().required("Picture is required"),
+  // picture: yup.mixed().required("Picture is required"),
   dob: yup.date().required("Date of birth is required").nullable(),
   address: yup.string().required("Address is required"),
-  phone: yup.string().required("Phone number is required"),
+  phone: yup.string(),
   date_enrolled: yup.date().required("Date enrolled is required").nullable(),
 });
 

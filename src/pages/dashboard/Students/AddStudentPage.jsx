@@ -47,7 +47,7 @@ const AddStudentPage = () => {
               </Box>
             </Box>
           </Grid>
-          <Grid item sm={12} md={4}>
+          {/* <Grid item sm={12} md={4}>
             <Box className=" rounded-md space-y-4">
               <Box className="flex items-center justify-end ">
                 <img
@@ -57,7 +57,7 @@ const AddStudentPage = () => {
                 />
               </Box>
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Box>

@@ -26,19 +26,15 @@ const useAddStudentForm = () => {
 
     if (isError) {
       toast.error(message);
-    }
-    if (isSuccess && isError) {
       dispatch(reset());
     }
-
-    dispatch(reset());
   }, [isLoading, isError, isLoading, dispatch, message]);
 
   const formik = useFormik({
     initialValues: {
       firstname: "",
       lastname: "",
-      email: "",
+      email: `${Date.now()}-Not-required@gmail.com`,
       nin: "",
       gender: "",
       password: "",

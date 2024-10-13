@@ -64,7 +64,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                   ) : null}
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={12} md={4}>
+              {/* <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="email">
                     Email
@@ -84,7 +84,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                     </span>
                   ) : null}
                 </Box>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
@@ -107,7 +107,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                   ) : null}
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={12} md={4}>
+              {/* <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="nin">
                     NIN
@@ -128,7 +128,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                     </span>
                   ) : null}
                 </Box>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="dob">
@@ -185,7 +185,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
               <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="phone">
-                    Phone number
+                    Student/Parent Phone number <br /> <b>(NOT COMPULSORY)</b>
                   </Label>
                   <Input
                     placeholder="e.g. 203992099923"
@@ -227,7 +227,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                   ) : null}
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={12} md={4}>
+              {/* <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="picture">
                     Student Passport
@@ -247,7 +247,7 @@ const AddStudentForm = ({ formik, isLoading, handleImageChange }) => {
                     </span>
                   ) : null}
                 </Box>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12} md={4}>
                 <Box className="">
                   <Label className="text-[11px]" htmlFor="password">

@@ -1,15 +1,28 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import useExportResultBroadsheet from "@/hooks/useExportResultBroadsheet";
 import useResultBroadsheet from "@/hooks/useResultBroadsheet";
 import Loader from "@/lib/Loader";
 import { ArrowBack } from "@mui/icons-material";
-import { Download } from "lucide-react";
-import React from "react";
+import { AlertCircle, Download } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Error from "@/lib/Error";
 
 export default function ResultBroadsheet() {
-  const { assessmentTypes, allSubjects, isLoading, resultsPerTermClass, user } =
-    useResultBroadsheet();
+  const {
+    assessmentTypes,
+    allSubjects,
+    isLoading,
+    resultsPerTermClass,
+    user,
+    isError,
+    message,
+  } = useResultBroadsheet();
   const { exportToExcel, tableRef } = useExportResultBroadsheet();
+
+  if (isError) {
+    return <Error message={message} />;
+  }
 
   return (
     <>

@@ -1,16 +1,27 @@
-import { getAllStudentResultPerClass } from "@/features/grade/gradeSlice";
+import {
+  getAllStudentResultPerClass,
+  reset,
+} from "@/features/grade/gradeSlice";
 import { getStudents } from "@/features/students/studentSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const useResultBroadsheet = () => {
-  const { resultsPerTermClass } = useSelector((state) => state.grade);
+  const { resultsPerTermClass, isError, message } = useSelector(
+    (state) => state.grade
+  );
   const { isLoading } = useSelector((state) => state.student);
   const { terms } = useSelector((state) => state.calender);
   const { singleTerm } = useSelector((state) => state.calender);
   const { user } = useSelector((state) => state.pbTeachersAuth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleRetry = () => {
+    navigate(0);
+  };
 
   useEffect(() => {
     dispatch(getStudents());
@@ -45,7 +56,16 @@ const useResultBroadsheet = () => {
 
   const assessmentTypes = getAssessmentTypes();
 
-  return { assessmentTypes, allSubjects, isLoading, resultsPerTermClass, user };
+  return {
+    assessmentTypes,
+    allSubjects,
+    isLoading,
+    resultsPerTermClass,
+    user,
+    message,
+    isError,
+    handleRetry,
+  };
 };
 
 export default useResultBroadsheet;
