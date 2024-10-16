@@ -151,7 +151,7 @@ const EditStudentForm = ({ formik, loading }) => {
                     Date of birth
                   </Label>
                   <Input
-                    placeholder="e.g. 0703032230323"
+                    placeholder="e.g. 01/02/2023"
                     name="dob"
                     type="date"
                     value={formik.values.dob}

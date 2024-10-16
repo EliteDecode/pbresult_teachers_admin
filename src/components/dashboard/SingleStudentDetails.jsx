@@ -1,7 +1,8 @@
 import { Box, Grid } from "@mui/material";
 import { Typography } from "antd";
 import React from "react";
-import passport from "../../assets/images/student_passport.jpeg";
+import passportMale from "../../assets/images/maleStudent.png";
+import passportFemale from "../../assets/images/femaleStudent.png";
 
 const SingleStudentDetails = ({ singleStudent }) => {
   const studentsDetails = [
@@ -33,6 +34,14 @@ const SingleStudentDetails = ({ singleStudent }) => {
       title: "Phone Number",
       value: singleStudent?.data?.phone,
     },
+    {
+      title: "DOB",
+      value: new Date(singleStudent?.data?.dob).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+    },
   ];
 
   return (
@@ -59,7 +68,12 @@ const SingleStudentDetails = ({ singleStudent }) => {
         <Box className=" rounded-md space-y-4">
           <Box className="flex items-center justify-end ">
             <img
-              src={singleStudent?.data?.picture || passport}
+              src={
+                singleStudent?.data?.picture ||
+                singleStudent?.data?.gender == "F"
+                  ? passportFemale
+                  : passportMale
+              }
               alt="school Logo"
               className="sm:w-[50%] w-full bg-white p-3 shadow-md rounded-md"
             />
