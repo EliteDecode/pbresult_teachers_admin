@@ -59,28 +59,26 @@ const useAddStudentResultsForm = () => {
     initialValues,
     enableReinitialize: true,
     onSubmit: (values) => {
-      const resultData = studentsPerCourse?.subjects?.students
-        ?.map((student) => {
+      const resultData = studentsPerCourse?.subjects?.students?.map(
+        (student) => {
           const ca = {};
-          const allFieldsComplete = assessmentTypes.every((grade) => {
+
+          // Process each assessment type, defaulting to 0 for missing scores
+          assessmentTypes.forEach((grade) => {
             const score =
               values[`student_${student.student_id}_ca_${grade.id}`];
-            if (score !== undefined && score !== null && score !== "") {
-              ca[grade.id] = score;
-              return true;
-            }
-            return false;
+            ca[grade.id] =
+              score !== undefined && score !== null && score !== ""
+                ? score
+                : "0"; // Set to "0" for missing scores
           });
 
-          if (allFieldsComplete) {
-            return {
-              student_id: student.student_id,
-              ca,
-            };
-          }
-          return null;
-        })
-        .filter(Boolean); // Remove null entries
+          return {
+            student_id: student.student_id,
+            ca,
+          };
+        }
+      );
 
       const data = {
         term_id: termId,
